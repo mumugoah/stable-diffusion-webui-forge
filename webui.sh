@@ -23,7 +23,7 @@ then
 fi
 
 # If $venv_dir is "-", then disable venv support
-use_venv=1
+use_venv=0
 if [[ $venv_dir == "-" ]]; then
   use_venv=0
 fi
@@ -67,7 +67,7 @@ then
 fi
 
 # this script cannot be run as root by default
-can_run_as_root=0
+can_run_as_root=1
 
 # read any command line flags to the webui.sh script
 while getopts "f" flag > /dev/null 2>&1
