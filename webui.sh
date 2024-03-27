@@ -6,6 +6,9 @@
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
+# 环境准备
+apt-get update
+apt-get install ffmpeg libsm6 libxext6  -y
 
 # If run from macOS, load defaults from webui-macos-env.sh
 if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -63,7 +66,7 @@ fi
 
 if [[ -z "${LAUNCH_SCRIPT}" ]]
 then
-    LAUNCH_SCRIPT="launch.py"
+    LAUNCH_SCRIPT="launch.py --listen --port 3200 --enable-insecure-extension-access"
 fi
 
 # this script cannot be run as root by default
@@ -194,33 +197,6 @@ else
     printf "\n%s\n" "${delimiter}"
     "${GIT}" clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git "${clone_dir}"
     cd "${clone_dir}"/ || { printf "\e[1m\e[31mERROR: Can't cd to %s/%s/, aborting...\e[0m" "${install_dir}" "${clone_dir}"; exit 1; }
-fi
-
-if [[ $use_venv -eq 1 ]] && [[ -z "${VIRTUAL_ENV}" ]];
-then
-    printf "\n%s\n" "${delimiter}"
-    printf "Create and activate python venv"
-    printf "\n%s\n" "${delimiter}"
-    cd "${install_dir}"/"${clone_dir}"/ || { printf "\e[1m\e[31mERROR: Can't cd to %s/%s/, aborting...\e[0m" "${install_dir}" "${clone_dir}"; exit 1; }
-    if [[ ! -d "${venv_dir}" ]]
-    then
-        "${python_cmd}" -m venv "${venv_dir}"
-        first_launch=1
-    fi
-    # shellcheck source=/dev/null
-    if [[ -f "${venv_dir}"/bin/activate ]]
-    then
-        source "${venv_dir}"/bin/activate
-    else
-        printf "\n%s\n" "${delimiter}"
-        printf "\e[1m\e[31mERROR: Cannot activate python venv, aborting...\e[0m"
-        printf "\n%s\n" "${delimiter}"
-        exit 1
-    fi
-else
-    printf "\n%s\n" "${delimiter}"
-    printf "python venv already activate or run without venv: ${VIRTUAL_ENV}"
-    printf "\n%s\n" "${delimiter}"
 fi
 
 # Try using TCMalloc on Linux
