@@ -245,6 +245,8 @@ prepare_tcmalloc() {
     fi
 }
 
+python ./launch.py --listen --port 3200 --enable-insecure-extension-access
+
 KEEP_GOING=0
 export SD_WEBUI_RESTART=tmp/restart
 while [[ "$KEEP_GOING" -eq "1" ]]; do
