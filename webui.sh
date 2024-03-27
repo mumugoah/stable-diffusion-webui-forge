@@ -66,7 +66,7 @@ fi
 
 if [[ -z "${LAUNCH_SCRIPT}" ]]
 then
-    LAUNCH_SCRIPT="launch.py --listen --port 3200 --enable-insecure-extension-access"
+    LAUNCH_SCRIPT="launch.py"
 fi
 
 # this script cannot be run as root by default
@@ -259,7 +259,7 @@ while [[ "$KEEP_GOING" -eq "1" ]]; do
         printf "Launching launch.py..."
         printf "\n%s\n" "${delimiter}"
         prepare_tcmalloc
-        "${python_cmd}" -u "${LAUNCH_SCRIPT}" "$@"
+        "${python_cmd}" -u "${LAUNCH_SCRIPT}" "--listen --port 3200 --enable-insecure-extension-access"
     fi
 
     if [[ ! -f tmp/restart ]]; then
